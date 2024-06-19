@@ -8,7 +8,7 @@
 
 ## How to install Docker
 I use this web for install Docker : https://docs.docker.com/engine/install/ubuntu/
-1.Set up Docker's apt repository.
+1. Set up Docker's apt repository.
     # Add Docker's official GPG key:
     sudo apt-get update
     sudo apt-get install ca-certificates curl
@@ -23,10 +23,10 @@ I use this web for install Docker : https://docs.docker.com/engine/install/ubunt
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
 
-2.Install the Docker packages.
+2. Install the Docker packages.
   -sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-3.Verify that the Docker Engine installation is successful by running the hello-world image.
+3. Verify that the Docker Engine installation is successful by running the hello-world image.
   -sudo docker run hello-world
 
 
