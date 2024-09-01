@@ -31,7 +31,7 @@
      ```
 
 ## Error we found
-Error that we found when we compose is Zookeeper Navigator, Mongo, Mosquitto and IOT processor. 
+Error that we found when we compose up is Zookeeper Navigator, Mongo, Mosquitto and IOT processor. 
 
 ## How to solve the problems.
 <ul>
