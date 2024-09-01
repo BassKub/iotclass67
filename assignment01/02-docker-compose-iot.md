@@ -31,11 +31,15 @@
      ```
 
 ## Error we found
-
+Error that we found when we compose is Zookeeper Navigator, Mongo, Mosquitto and IOT processor. 
 
 ## How to solve the problems.
-
-
+<ul>
+  <li>Zookeeper Navigator : we comment it because we not using it and it make the error happen.</li>
+  <li>Mongo : We found that error happen with version that seem to high for our project so we have to go back to 4.6.6 version.</li>
+  <li>Mosquitto : There is a problem where we cannot access the connection because there is no config file for Mosquitto. We have to create a config file by copying the file contained in the Container path.</li>
+   <li>IOT processor : We can observed from the log if there is a error message we have to restart iot-processor until there is no error message.</li>
+</ul>
 ## Output
 
 - [ ] IoT Sensor - Dashboards - Grafana 
