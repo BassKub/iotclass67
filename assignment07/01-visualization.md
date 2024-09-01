@@ -7,6 +7,7 @@ Grafana จะถูกรันเป็น container ภายใต้ compos
 # 1. Mount Volumn ใน Grafana เพื่อเก็บ plugins
 ในการติดตั้งนั้น อย่างแรกที่ต้องทำ คือ การ mount volumn ของ container ให้ถูกต้อง เพื่อป้องกันไม่ให้ plugin ที่เรากำลังจะลงหายไปเวลาเราสั่ง down container โดยควร mount volumn ดังนี้
 
+``` python
 grafana:
   image: grafana/grafana:9.5.20-ubuntu
   container_name: grafana
@@ -24,21 +25,48 @@ grafana:
   links:
     - prometheus
   ports:
-    - "8085:3000"
-    
-   
+    - "8085:3000 
+
+```   
 หลังจาก mount volumn เรียบร้อยก็สามารถรัน grafana ได้เลย
+
 # 2. ติดตั้ง FlowCharting
 ขั้นตอนการติดตั้งมีดังนี้
 1. เข้าไปใน container ของ grafana
-   docker exec -it grafana /bin/bash
+   ``` docker exec -it grafana /bin/bash ```
 2. cd เข้าไปใน plugin directory
-   cd /var/lib/grafana/plugins
+   ``` cd /var/lib/grafana/plugins ```
 3. สร้าง directory มา 1 directory ด้วยชื่ออะไรก็ได้ เพื่อรอเก็บ plugin file ที่เราจะทำการ get และ cd เข้าไป
+   ```
    mkdir flowcharting
    cd flowcharting
+   ```
 4. โหลด plugin โดยการใช้ wget ตามด้วยลิงค์ zip file
+   ```
    wget https://github.com/skyfrank/grafana-flowcharting/releases/download/v1.0.0e/agenty-flowcharting-panel-1.0.0e.231214594-SNAPSHOT.zip
 
    plugin source >>> https://github.com/skyfrank/grafana-flowcharting/releases/tag/v1.0.0e
+   ```
 ![image](https://github.com/user-attachments/assets/40e386be-ebce-418c-a2cf-4de2e755fbd4)
+
+5. extract zip file ด้วยการใช้ unzip
+```
+   unzip agenty-flowcharting-panel-1.0.0e.231214594-SNAPSHOT.zip -d ../grafana-flowcharting
+```
+6. แก้ไขให้ grafana รองรับ angular plugin ได้เนื่องจาก grafana เวอร์ชั่นใหม่ ๆ ไม่รองรับแล้ว แต่เราแก้ไขได้
+   -เข้าไปใน path /etc/grafana
+```
+   cd /etc/grafana
+```
+   -แก้ไขไฟล์ grafana.ini
+```
+   vim grafana.ini
+```
+   -ทำการหา keyword คำว่า angular โดยการใช้
+```
+   /angular
+```
+   -แก้ไขให้เป็น true
+```   
+angular_support_enabled = true
+```
