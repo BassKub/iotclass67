@@ -36,7 +36,6 @@ grafana:
    mkdir flowcharting
    cd flowcharting
 4. โหลด plugin โดยการใช้ wget ตามด้วยลิงค์ zip file
-   wget https://github.com/skyfrank/grafana-flowcharting/releases/download/v1.0.0e/agenty-flowcharting-panel-    
-   1.0.0e.231214594-SNAPSHOT.zip
+   wget https://github.com/skyfrank/grafana-flowcharting/releases/download/v1.0.0e/agenty-flowcharting-panel-1.0.0e.231214594-SNAPSHOT.zip
    plugin source >>> https://github.com/skyfrank/grafana-flowcharting/releases/tag/v1.0.0e
 ![image](https://github.com/user-attachments/assets/40e386be-ebce-418c-a2cf-4de2e755fbd4)
