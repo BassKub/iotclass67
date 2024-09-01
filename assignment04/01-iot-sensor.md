@@ -2,6 +2,7 @@
 
 ## MQTT Topic
 
+MQTT topic that we assign is iot-frames
 
 ## MQTT Payload
 
