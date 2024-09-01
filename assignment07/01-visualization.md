@@ -4,7 +4,7 @@
 Grafana จะถูกรันเป็น container ภายใต้ compose ที่มาจาก https://github.com/sergio11/iot_event_streaming_architecture ทำให้ขั้นตอนจะเริ่มที่การติดตั้ง FlowCharting
 
 # การติดตั้ง FlowCharting Plugins
-1. Mount Volumn ใน Grafana เพื่อเก็บ plugins
+# 1. Mount Volumn ใน Grafana เพื่อเก็บ plugins
 ในการติดตั้งนั้น อย่างแรกที่ต้องทำ คือ การ mount volumn ของ container ให้ถูกต้อง เพื่อป้องกันไม่ให้ plugin ที่เรากำลังจะลงหายไปเวลาเราสั่ง down container โดยควร mount volumn ดังนี้
 grafana:
   image: grafana/grafana:9.5.20-ubuntu
