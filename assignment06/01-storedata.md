@@ -22,7 +22,9 @@ Data transfer is managed through Kafka Connect, which connects to MQTT, Promethe
           "key.converter.schemas.enable":false
         }
     }
-    ```
+    ```bash
+    docker --version
+    docker-compose --version
   </li>
   <li>Tea</li>
   <li>Milk</li>
