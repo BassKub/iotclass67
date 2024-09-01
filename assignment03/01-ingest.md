@@ -39,5 +39,14 @@ MQTT (Message Queuing Telemetry Transport) เป็นโปรโตคอล�
 
 # Payload 
 ```bash
-
+doc["id"] = mqtt_id; // Use id
+doc["name"] = iot_name; // Use name
+doc["place_id"] = place_id; // Use place_id
+doc["date"] = formattedDate;
+doc["timestamp"] = (long long)(epochTime) * 1000 + millis() % 1000;
+JsonObject payload = doc.createNestedObject("payload");
+payload["temperature"] = temperature;
+payload["humidity"] = humidity;
+payload["pressure"] = pressure;
+payload["luminosity"] = Value; // Luminosity in kLux
 ```
