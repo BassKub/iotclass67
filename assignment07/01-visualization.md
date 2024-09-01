@@ -1,8 +1,9 @@
-![image](https://github.com/user-attachments/assets/40e386be-ebce-418c-a2cf-4de2e755fbd4)# Data Visualization.
+# Data Visualization.
+
 การสร้าง Dashboard สำหรับ Visualization เพื่อดูค่า data ที่เรารับมานั้น ในขั้นตอนนี้เราจะใช้ framework ที่ชื่อว่า "Grafana" ร่วมกับ plugin ที่ชื่อว่า "FlowCharting" ที่จะช่วยสร้างแผนผังสถานที่เพื่อให้ UX ดียิ่งขึ้น ซึ่งการสร้างผังสถานที่ที่ต้องการ เราจะผ่านการทำใน "Draw.io" ที่เชื่อมอยู่ภายใน library
 Grafana จะถูกรันเป็น container ภายใต้ compose ที่มาจาก https://github.com/sergio11/iot_event_streaming_architecture ทำให้ขั้นตอนจะเริ่มที่การติดตั้ง FlowCharting
 
-#การติดตั้ง FlowCharting Plugins
+# การติดตั้ง FlowCharting Plugins
 1. Mount Volumn ใน Grafana เพื่อเก็บ plugins
 ในการติดตั้งนั้น อย่างแรกที่ต้องทำ คือ การ mount volumn ของ container ให้ถูกต้อง เพื่อป้องกันไม่ให้ plugin ที่เรากำลังจะลงหายไปเวลาเราสั่ง down container โดยควร mount volumn ดังนี้
 grafana:
@@ -25,7 +26,7 @@ grafana:
     - "8085:3000"
    
 หลังจาก mount volumn เรียบร้อยก็สามารถรัน grafana ได้เลย
-#2. ติดตั้ง FlowCharting
+# 2. ติดตั้ง FlowCharting
 ขั้นตอนการติดตั้งมีดังนี้
 1. เข้าไปใน container ของ grafana
    docker exec -it grafana /bin/bash
@@ -38,3 +39,4 @@ grafana:
    wget https://github.com/skyfrank/grafana-flowcharting/releases/download/v1.0.0e/agenty-flowcharting-panel-    
    1.0.0e.231214594-SNAPSHOT.zip
    plugin source >>> https://github.com/skyfrank/grafana-flowcharting/releases/tag/v1.0.0e
+![image](https://github.com/user-attachments/assets/40e386be-ebce-418c-a2cf-4de2e755fbd4)
