@@ -2,10 +2,33 @@
 
 
 ## How to start docker compose
+1. **Navigate to Your Project Directory**
+   - Open a terminal and move to the directory where your `docker-compose.yml` file is located:
+     ```bash
+     cd /path/to/your/project
+     ```
 
-```bash
+2. **Start Docker Compose**
+   - To start the services defined in your `docker-compose.yml` file, run:
+     ```bash
+     docker-compose up
+     ```
+   - To start the services in detached mode (background):
+     ```bash
+     docker-compose up -d
+     ```
 
-```
+3. **Verify Running Services**
+   - Check the status of your running containers:
+     ```bash
+     docker ps
+     ```
+
+4. **Stop Docker Compose**
+   - To stop and remove the containers:
+     ```bash
+     docker-compose down
+     ```
 
 ## Error we found
 
