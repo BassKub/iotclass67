@@ -67,6 +67,44 @@ grafana:
    /angular
 ```
    -แก้ไขให้เป็น true
-```   
+```
 angular_support_enabled = true
 ```
+
+หลังจากทำ 6 ขั้นตอนเสร็จสิ้นแล้วให้ทำการออกมาจาก container ของ grafana และ restart grafana
+```
+docker compose restart grafana
+```
+จากนั้นก็เข้าไปใน grafana ผ่าน browser เพื่อตรวจสอบว่ามี plugin ชื่อ FlowCharting ติดตั้งแล้วหรือยัง ถ้ามีแสดงว่าติดตั้งสำเร็จแล้ว
+# การใช้งาน FlowCharting
+ในตัวอย่างนี้เราจะทำการสร้าง floor plan มาเพื่อจำลองการทำ smart home ที่มี sensor ต่าง ๆ อยู่ตามจุดภายในบ้าน ซึ่งขั้นตอนการทำมีดังนี้
+
+#1 ทำการสร้าง Floor plan หรือนำเข้าแปลนบ้านในรูปแบบ xml. หรือ svg. file
+กด add เพื่อเพิ่ม widget ในหน้า dashboard โดยการเลือก FlowCharting และเราจะได้ chart เริ่มต้นของ plugin นี้มาดังรูป
+![image](https://github.com/user-attachments/assets/9abe780a-a940-4a43-ac71-b86879c91fa5)
+![image](https://github.com/user-attachments/assets/71bf98dc-06cc-48b7-8c6d-7d7beae46e2d)
+#2 กดปุ่ม edit diagram โดยตัวระบบจะลิงค์เราไปที่หน้าของ draw.io เพื่อให้เราแก้ไข โดยเราสามารถใส่ floor plan เป็นรูป หรือทำเป็น diagram ก็ได้ (จริง ๆ สามารถทำบน local แล้ว export เป็น SVG หากใช้รูป หรือ xml ไปใช้งานได้เช่นกัน)
+![image](https://github.com/user-attachments/assets/8d705606-2a0c-497d-8e46-dbc6320a6194)
+โดยผมจะใช้เป็นแปลนบ้านไฟล์.xml นำเข้ามาจากนั้นทำการแบ่งlayerและadd text box และทำการเพิ่มเลขห้องไว้รอเพื่อที่จะรอทำการ mapping ค่าต่างๆของเซ็นเซอร์ iot มาแสดงผล Dashboard ใน Grafana
+![image](https://github.com/user-attachments/assets/ea8e2d42-810b-4b08-b6f2-d424544d6e88)
+
+# 2.การแสดงผลค่า sensor ในแปลนบ้านที่เราทำการสร้างไว้
+การที่เราจะนำค่ามาแสดงนั้น ด้วยความที่ค่าทั้งหมดตอนนี้ถูกดึงมาจากการใช้งาน Prometheus ทำให้เราสามารถ query ค่าออกมาใช้งานได้ โดยมีขั้นตอนดังนี้
+1. การ query ค่าจาก Prometeus
+   เลือก Data source เป็น Prometheus เพราะเราใช้ Prometheus ในการดึง streaming data
+   ![image](https://github.com/user-attachments/assets/2675f19a-14e1-40b5-880e-4b9a6f205661)
+
+   select metric เป็นค่าที่เราอยากใช้มาแสดง เช่น sample_sensor_metric_temperature
+   ![image](https://github.com/user-attachments/assets/e0783ed4-efde-45f7-be32-ff1eed8c4914)
+
+   กด run queries เพื่อดึงค่าข้อมูล
+   ![image](https://github.com/user-attachments/assets/61194cb4-420b-4f75-9bc6-f4dd48985085)
+
+2. ทำการกำหนด rule เพื่อที่จะให้เราสามารถตั้งค่าสีกับอุณหภูมิที่เราต้องการให้มัน alert ได้
+   ![image](https://github.com/user-attachments/assets/f2b265c3-74d9-4c33-bd06-8c8d6703da83)
+   ![image](https://github.com/user-attachments/assets/777eb342-d03b-4324-9296-3cfc871cffb3)
+
+   หลังจากนั้นเราก็จะสามารถเห็นใน Dashboard ของเราได้
+   
+   ภาพรวม
+
