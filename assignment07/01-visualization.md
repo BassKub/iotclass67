@@ -92,19 +92,24 @@ docker compose restart grafana
 การที่เราจะนำค่ามาแสดงนั้น ด้วยความที่ค่าทั้งหมดตอนนี้ถูกดึงมาจากการใช้งาน Prometheus ทำให้เราสามารถ query ค่าออกมาใช้งานได้ โดยมีขั้นตอนดังนี้
 1. การ query ค่าจาก Prometeus
    เลือก Data source เป็น Prometheus เพราะเราใช้ Prometheus ในการดึง streaming data
+   
    ![image](https://github.com/user-attachments/assets/2675f19a-14e1-40b5-880e-4b9a6f205661)
 
    select metric เป็นค่าที่เราอยากใช้มาแสดง เช่น sample_sensor_metric_temperature
+   
    ![image](https://github.com/user-attachments/assets/e0783ed4-efde-45f7-be32-ff1eed8c4914)
 
    กด run queries เพื่อดึงค่าข้อมูล
+    
    ![image](https://github.com/user-attachments/assets/61194cb4-420b-4f75-9bc6-f4dd48985085)
 
-2. ทำการกำหนด rule เพื่อที่จะให้เราสามารถตั้งค่าสีกับอุณหภูมิที่เราต้องการให้มัน alert ได้
+3. ทำการกำหนด rule เพื่อที่จะให้เราสามารถตั้งค่าสีกับอุณหภูมิที่เราต้องการให้มัน alert ได้
    ![image](https://github.com/user-attachments/assets/f2b265c3-74d9-4c33-bd06-8c8d6703da83)
    ![image](https://github.com/user-attachments/assets/777eb342-d03b-4324-9296-3cfc871cffb3)
 
    หลังจากนั้นเราก็จะสามารถเห็นใน Dashboard ของเราได้
-   
    ภาพรวม
+![S__9166861_0](https://github.com/user-attachments/assets/9727847e-d89d-4534-b7a4-d6d25801283a)
+![S__9166863_0](https://github.com/user-attachments/assets/0c071578-467c-45ab-aa54-e7ae0b05bcab)
 
+   
