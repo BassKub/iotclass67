@@ -6,6 +6,7 @@ Internet of things Class 2567
 - [ ] [Main technologies of architectures](https://github.com/BassKub/iotclass67/blob/main/assignment00/architecture.md)
 - [ ] [Setting up servers and components.](https://github.com/BassKub/iotclass67/blob/main/assignment01/01-install-server.md)
 - [ ] [Compose services.](https://github.com/BassKub/iotclass67/blob/main/assignment01/02-docker-compose-iot.md)
+- [ ] [MQTT](https://github.com/BassKub/iotclass67/blob/main/assignment03/01-ingest.md)
 - [ ] [Ingest and store real-time data from IoT sensors.](https://github.com/BassKub/iotclass67/blob/main/assignment04/01-iot-sensor.md)
 - [ ] [Analyze and make aggregations.](https://github.com/BassKub/iotclass67/blob/main/assignment05/01-analyze.md)
 - [ ] [Store data.](https://github.com/BassKub/iotclass67/blob/main/assignment06/01-storedata.md)
