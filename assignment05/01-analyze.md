@@ -183,3 +183,159 @@ public class AggregateMetricsBySensorProcessor {
 }
 ```
 
+## Second processor "Aggregate Metrics By Place Processor
+ตัวประมวลผลตัวที่สองจะทำงานคล้ายกับตัวแรก แต่จะทำการรวมข้อมูลตาม place identifier แทนที่จะเป็น sensor id
+
+ในโครงการนี้ ตัวประมวลผลจะคำนวณค่าเฉลี่ยตามสถานที่ โดยรวมข้อมูลจากเซ็นเซอร์หลายตัวที่อยู่ในสถานที่เดียวกัน จะต้องตั้งค่า SerDe ให้เหมาะสมกับ schema ที่แตกต่างกัน หลังจากประมวลผล ผลลัพธ์จะถูกบันทึกลงใน Kafka topic ชื่อ iot-aggregate-metrics-place.
+
+``` python
+@Component
+public class AggregateMetricsByPlaceProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(AggregateMetricsByPlaceProcessor.class);
+
+    private final static int WINDOW_SIZE_IN_MINUTES = 5;
+    private final static String WINDOW_STORE_NAME = "aggregate-metrics-by-place-tmp";
+
+    /**
+     * Agg Metrics Place Topic Output
+     */
+    @Value("${kafka.topic.aggregate-metrics-place}")
+    private String aggMetricsPlaceOutput;
+
+    /**
+     *
+     * @param stream
+     */
+    public void process(KStream<SensorKeyDTO, SensorDataDTO> stream) {
+        buildAggregateMetrics(stream)
+                .to(aggMetricsPlaceOutput, Produced.with(String(), new SensorAggregateMetricsPlaceSerde()));
+    }
+
+    /**
+     * Build Aggregate Metrics Stream
+     *
+     * @param stream
+     * @return
+     */
+    private KStream<String, SensorAggregatePlaceMetricsDTO> buildAggregateMetrics(KStream<SensorKeyDTO, SensorDataDTO> stream) {
+        return stream
+                .map((key, val) -> new KeyValue<>(val.getPlaceId(), val))
+                .groupByKey(Grouped.with(String(), new SensorDataSerde()))
+                .windowedBy(TimeWindows.of(Duration.ofMinutes(WINDOW_SIZE_IN_MINUTES)).grace(Duration.ofMillis(0)))
+                .aggregate(SensorAggregatePlaceMetricsDTO::new,
+                        (String k, SensorDataDTO v, SensorAggregatePlaceMetricsDTO va) -> aggregateData(v, va),
+                        buildWindowPersistentStore()
+                )
+                .suppress(Suppressed.untilWindowCloses(unbounded()))
+                .toStream()
+                .map((key, value) -> KeyValue.pair(key.key(), value));
+    }
+
+    /**
+     * Build Window Persistent Store
+     *
+     * @return
+     */
+    private Materialized<String, SensorAggregatePlaceMetricsDTO, WindowStore<Bytes, byte[]>> buildWindowPersistentStore() {
+        return Materialized
+                .<String, SensorAggregatePlaceMetricsDTO, WindowStore<Bytes, byte[]>>as(WINDOW_STORE_NAME)
+                .withKeySerde(String())
+                .withValueSerde(new SensorAggregateMetricsPlaceSerde());
+    }
+
+    /**
+     * Aggregate Data
+     *
+     * @param v
+     * @param va
+     * @return
+     */
+    private SensorAggregatePlaceMetricsDTO aggregateData(final SensorDataDTO v, final SensorAggregatePlaceMetricsDTO va) {
+        va.setPlaceId(v.getId());
+        // Start Agg
+        if (va.getStartAgg() == null) {
+            final Date startAggAt = new Date();
+            va.setStartAgg(startAggAt);
+            va.setStartAggTm(startAggAt.getTime());
+        }
+        va.setCountMeasures(va.getCountMeasures() + 1);
+        // Temperature
+        va.setSumTemperature(va.getSumTemperature() + v.getPayload().getTemperature());
+        va.setAvgTemperature(va.getSumTemperature() / va.getCountMeasures()); // Humidity
+        // Humidity
+        va.setSumHumidity(va.getSumHumidity() + v.getPayload().getHumidity());
+        va.setAvgHumidity(va.getSumHumidity() / va.getCountMeasures()); // Luminosity
+        // Luminosity
+        va.setSumLuminosity(va.getSumLuminosity() + v.getPayload().getLuminosity());
+        va.setAvgLuminosity(va.getSumLuminosity() / va.getCountMeasures()); // Pressure
+        // Pressure
+        va.setSumPressure(va.getSumPressure() + v.getPayload().getPressure());
+        va.setAvgPressure(va.getSumPressure() / va.getCountMeasures());
+
+        // End Agg
+        final Date endAggAt = new Date();
+        va.setEndAgg(endAggAt);
+        va.setEndAggTm(endAggAt.getTime());
+        return va;
+    }
+
+}
+```
+## Third processor "Metrics Time Series Processor
+ตัวประมวลผลตัวที่สามมีหน้าที่ในการแปลงข้อมูลให้อยู่ในรูปแบบที่เข้ากันได้กับ Prometheus ซึ่งเป็นระบบเก็บข้อมูลเมตริกที่นิยมใช้ในงานตรวจสอบระบบ
+
+ในโครงการนี้ ข้อมูลจะถูกเปลี่ยนเป็น schema ที่เหมาะสมกับ Prometheus โดยใช้ชื่อ, sensor id, และ place identifier เป็นมิติ (dimension) ของข้อมูล และใช้ payload เป็นค่าที่สามารถแสดงผลในรูปแบบ time series บน Grafana ข้อมูลนี้จะถูกบันทึกลงใน Kafka topic ชื่อ iot-metrics-time-series ซึ่ง Prometheus จะดึงข้อมูลจาก topic นี้เพื่อนำไปแสดงผลเป็นเมตริก.
+
+``` python
+@Component
+public class MetricsTimeSeriesProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(MetricsTimeSeriesProcessor.class);
+
+    private final static String SENSOR_TIME_SERIE_NAME = "sample_sensor_metric";
+    private final static String SENSOR_TIME_SERIE_TYPE = "sensor";
+
+    /**
+     * Metrics Time Series
+     */
+    @Value("${kafka.topic.metrics-time-series}")
+    private String metricTimeSeriesOutput;
+
+    /**
+     *
+     * @param stream
+     */
+    public void process(KStream<SensorKeyDTO, SensorDataDTO> stream) {
+        stream
+                .map((key, val) -> new KeyValue<>(val.getId(), buildSensorTimeSerieMetric(val)))
+                .to(metricTimeSeriesOutput, Produced.with(String(), new SensorTimeSerieMetricSerde()));
+    }
+
+    /**
+     * Build Sensor Time Serie Meter
+     *
+     * @param sensorData
+     * @return
+     */
+    private SensorTimeSerieMetricDTO buildSensorTimeSerieMetric(final SensorDataDTO sensorData) {
+        return SensorTimeSerieMetricDTO.builder()
+                .name(SENSOR_TIME_SERIE_NAME)
+                .timestamp(new Date().getTime())
+                .type(SENSOR_TIME_SERIE_TYPE)
+                .dimensions(SensorTimeSerieMetricDimensionsDTO.builder()
+                        .placeId(sensorData.getPlaceId())
+                        .sensorId(sensorData.getId())
+                        .sensorName(sensorData.getName())
+                        .build())
+                .values(SensorTimeSerieMetricValuesDTO.builder()
+                        .humidity((double) sensorData.getPayload().getHumidity())
+                        .luminosity((double) sensorData.getPayload().getLuminosity())
+                        .pressure((double) sensorData.getPayload().getPressure())
+                        .temperature((double) sensorData.getPayload().getTemperature())
+                        .build())
+                .build();
+    }
+
+}
+```
