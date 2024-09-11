@@ -208,16 +208,20 @@ void reconnect() {
     Serial.print("Attempting MQTT connection to ");
     Serial.print(mqtt_server);
     Serial.print("...");
-    if (client.connect(mqtt_id, mqtt_username, mqtt_password)) {
-      Serial.println("connected");
-      GREEN(); // Indicate successful connection
-      delay(3000);
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" retrying in 1 second");
-      BLUE(); // Indicate failed connection attempt
-      delay(1000); // Wait for 1 second before retrying
+    if (WiFi.status() != WL_CONNECTED) {
+      setup_wifi();
+    }else{
+      if (client.connect(mqtt_id, mqtt_username, mqtt_password)) {
+        Serial.println("connected");
+        GREEN(); // Indicate successful connection
+        delay(3000);
+      } else {
+        Serial.print("failed, rc=");
+        Serial.print(client.state());
+        Serial.println(" retrying in 1 second");
+        BLUE(); // Indicate failed connection attempt
+        delay(1000); // Wait for 1 second before retrying
+      }
     }
   }
 }
