@@ -11,12 +11,12 @@
 
 3.MetricsTimeSeriesProcessor
 
-''' python
 
-    @Configuration
-    @EnableKafka
-    @EnableKafkaStreams
-    public class KafkaStreamsConfig {
+``` python
+@Configuration
+@EnableKafka
+@EnableKafkaStreams
+public class KafkaStreamsConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaStreamsConfig.class);
 
@@ -76,6 +76,5 @@
         return stream;
     }
 
-    }
-
-'''
+}
+```   
