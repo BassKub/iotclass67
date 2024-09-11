@@ -2,10 +2,11 @@
 
 ## Architecture Overview
 
-![IoT Event Streaming Architecture](https://miro.medium.com/v2/resize:fit:2000/format:webp/1*IUaBLlbVKgmsjbjqzew0ZQ.png)
+![ดีไซน์ที่ยังไม่ได้ตั้งชื่อ](https://github.com/user-attachments/assets/fdf784fe-aacf-443a-8d6a-07b71c16615d)
 
 ## Eclipse Mosquitto
 เป็นโปรเจคโอเพนซอร์สที่ให้บริการ Broker MQTT ซึ่งเป็นโปรแกรมที่ทำหน้าที่เป็นตัวกลางในการสื่อสารระหว่างอุปกรณ์ IoT หรืออุปกรณ์อื่น ๆ กับโครงข่ายอินเทอร์เน็ตและ Mosquitto มีน้ำหนักที่เบาและสามารถใช้ได้ทุกอุปกรณ์ โดยที่อุปกรณ์ที่เป็น Publisher สามารถส่งข้อมูลไปยัง Broker และอุปกรณ์ที่เป็น Subscriber สามารถรับข้อมูลจาก Broker ได้ 
+
 
 
 ## Apache ZooKeeper
