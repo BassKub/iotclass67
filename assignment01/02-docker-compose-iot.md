@@ -51,7 +51,7 @@ Error that we found when we compose up is Zookeeper Navigator, Mongo, Mosquitto 
 - [ ] ZooNavigator
 
 
-### Docker .yml file
+# Docker .yml file
 
 ```bash
 volumes:
