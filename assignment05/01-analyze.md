@@ -83,3 +83,103 @@ public class KafkaStreamsConfig {
 ตัวประมวลผลตัวแรกจะทำการรวมข้อมูลตาม sensor id โดยใช้ rotating time window ที่มีช่วงเวลา 5 นาที
 
 ในโครงการนี้ ตัวประมวลผลจะใช้ข้อมูลจากเซ็นเซอร์หลายตัว เช่น อุณหภูมิ, ความชื้น, ความดัน, และความสว่าง เพื่อคำนวณค่าเฉลี่ยสำหรับตัวแปรแต่ละตัว หลังจากประมวลผล ข้อมูลใหม่จะถูก serialize และ deserialize ด้วย SerDe ที่เหมาะสม เพื่อส่งต่อไปยัง Kafka เมื่อสิ้นสุดช่วงเวลาการประมวลผล จะสร้างเรคคอร์ดที่ประกอบด้วยข้อมูลการรวมประมาณ 300 รายการต่อเซ็นเซอร์ ผลลัพธ์สุดท้ายจะถูกบันทึกลงใน Kafka topic ชื่อ iot-aggregate-metrics-by-sensor.
+
+``` python
+@Component
+public class AggregateMetricsBySensorProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(AggregateMetricsBySensorProcessor.class);
+
+    private final static int WINDOW_SIZE_IN_MINUTES = 5;
+    private final static String WINDOW_STORE_NAME = "aggregate-metrics-by-sensor-tmp";
+
+    /**
+     * Agg Metrics Sensor Topic Output
+     */
+    @Value("${kafka.topic.aggregate-metrics-sensor}")
+    private String aggMetricsSensorOutput;
+
+    /**
+     *
+     * @param stream
+     */
+    public void process(KStream<SensorKeyDTO, SensorDataDTO> stream) {
+        buildAggregateMetricsBySensor(stream)
+                .to(aggMetricsSensorOutput, Produced.with(String(), new SensorAggregateMetricsSensorSerde()));
+    }
+
+    /**
+     * Build Aggregate Metrics By Sensor Stream
+     *
+     * @param stream
+     * @return
+     */
+    private KStream<String, SensorAggregateSensorMetricsDTO> buildAggregateMetricsBySensor(KStream<SensorKeyDTO, SensorDataDTO> stream) {
+        return stream
+                .map((key, val) -> new KeyValue<>(val.getId(), val))
+                .groupByKey(Grouped.with(String(), new SensorDataSerde()))
+                .windowedBy(TimeWindows.of(Duration.ofMinutes(WINDOW_SIZE_IN_MINUTES)).grace(Duration.ofMillis(0)))
+                .aggregate(SensorAggregateSensorMetricsDTO::new,
+                        (String k, SensorDataDTO v, SensorAggregateSensorMetricsDTO va) -> aggregateData(v, va),
+                         buildWindowPersistentStore()
+                )
+                .suppress(Suppressed.untilWindowCloses(unbounded()))
+                .toStream()
+                .map((key, value) -> KeyValue.pair(key.key(), value));
+    }
+
+    /**
+     * Build Window Persistent Store
+     *
+     * @return
+     */
+    private Materialized<String, SensorAggregateSensorMetricsDTO, WindowStore<Bytes, byte[]>> buildWindowPersistentStore() {
+        return Materialized
+                .<String, SensorAggregateSensorMetricsDTO, WindowStore<Bytes, byte[]>>as(WINDOW_STORE_NAME)
+                .withKeySerde(String())
+                .withValueSerde(new SensorAggregateMetricsSensorSerde());
+    }
+
+    /**
+     * Aggregate Data
+     *
+     * @param v
+     * @param va
+     * @return
+     */
+    private SensorAggregateSensorMetricsDTO aggregateData(final SensorDataDTO v, final SensorAggregateSensorMetricsDTO va) {
+        // Sensor Data
+        va.setId(v.getId());
+        // Sensor Data
+        va.setId(v.getId());
+        va.setName(v.getName());
+        // Start Agg
+        if (va.getStartAgg() == null) {
+            final Date startAggAt = new Date();
+            va.setStartAgg(startAggAt);
+            va.setStartAggTm(startAggAt.getTime());
+        }
+        va.setCountMeasures(va.getCountMeasures() + 1);
+        // Temperature
+        va.setSumTemperature(va.getSumTemperature() + v.getPayload().getTemperature());
+        va.setAvgTemperature(va.getSumTemperature() / va.getCountMeasures()); // Humidity
+        // Humidity
+        va.setSumHumidity(va.getSumHumidity() + v.getPayload().getHumidity());
+        va.setAvgHumidity(va.getSumHumidity() / va.getCountMeasures()); // Luminosity
+        // Luminosity
+        va.setSumLuminosity(va.getSumLuminosity() + v.getPayload().getLuminosity());
+        va.setAvgLuminosity(va.getSumLuminosity() / va.getCountMeasures()); // Pressure
+        // Pressure
+        va.setSumPressure(va.getSumPressure() + v.getPayload().getPressure());
+        va.setAvgPressure(va.getSumPressure() / va.getCountMeasures());
+
+        // End Agg
+        final Date endAggAt = new Date();
+        va.setEndAgg(endAggAt);
+        va.setEndAggTm(endAggAt.getTime());
+        return va;
+    }
+
+}
+```
+
