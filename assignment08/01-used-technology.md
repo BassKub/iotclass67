@@ -17,5 +17,4 @@
   <li>Eclipse Mosquitto</li>
   <li>MongoDB</li>
   <li>Mongo DB Express</li>
-  <li>Cadvisor</li>
 </ul>
