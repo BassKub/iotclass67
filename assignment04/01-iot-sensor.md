@@ -1,4 +1,4 @@
-# Ingest and store real-time data from IoT sensors.
+[Flowchart(Bass).drawio.pdf](https://github.com/user-attachments/files/17040752/Flowchart.Bass.drawio.pdf)# Ingest and store real-time data from IoT sensors.
 
 ## MQTT Topic
 
@@ -340,6 +340,9 @@ void readAnalogSensor() {
   Serial.println(" kLux");
 }
 ```
+## FlowChart
+![Flowchart(Bass) drawio (1)](https://github.com/user-attachments/assets/1aa1abeb-44bb-4234-8282-3cad7930a87c)
+
 
 ## สถานะไฟใน Cucumber RIS
 - สีขาวคือตอนเปิด<br>
