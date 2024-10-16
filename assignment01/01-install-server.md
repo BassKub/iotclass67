@@ -7,14 +7,17 @@
 3. Set up language, Time zone, Username Password
 4. install tools that need for install docker like vim, ifconfig, git.
     ### Install vim
+   ```
     sudo apt install vim -y
-
+   ```
     ### Install ifconfig (part of the net-tools package)
+   ```
     sudo apt install net-tools -y
-    
+   ``` 
     ### Install git
+   ```
     sudo apt install git -y
-   
+   ```
 6. set ip network (net-tools) for ssh from local notebook
 
 
