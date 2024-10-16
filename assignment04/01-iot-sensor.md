@@ -341,7 +341,9 @@ void readAnalogSensor() {
 }
 ```
 ## FlowChart
-![Flowchart(Bass) drawio (1)](https://github.com/user-attachments/assets/1aa1abeb-44bb-4234-8282-3cad7930a87c)
+
+![2](https://github.com/user-attachments/assets/d16191da-22dc-4df4-a002-5d0ac012a210)
+![1](https://github.com/user-attachments/assets/2264ea27-427b-4136-b6bd-30a476f28910)
 
 
 ## สถานะไฟใน Cucumber RIS
