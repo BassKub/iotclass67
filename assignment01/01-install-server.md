@@ -4,9 +4,19 @@
 ## How to install Server
 1. Download Ubuntu Server from https://ubuntu.com/download/server and install it to USB to make it ready to boot ubuntu os.
 2. Plug in Usb to server computer and select Ubuntu server and wait for set up.
-3. Set up language, Time zone, Username Password 
+3. Set up language, Time zone, Username Password
 4. install tools that need for install docker like vim, ifconfig, git.
-5. set ip network (net-tools) for ssh from local notebook
+    ### Install vim
+    sudo apt install vim -y
+
+    ### Install ifconfig (part of the net-tools package)
+    sudo apt install net-tools -y
+    
+    ### Install git
+    sudo apt install git -y
+   
+6. set ip network (net-tools) for ssh from local notebook
+
 
 ## How to install Docker
 I use this web for install Docker : https://docs.docker.com/engine/install/ubuntu/
