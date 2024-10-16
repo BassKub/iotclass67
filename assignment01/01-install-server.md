@@ -1,10 +1,12 @@
 # Install Server and Docker
-
+จากงานเราใช้ Server เป็น Ubuntu Server เมื่อได้ทำการลง OS เสร็จเรียบร้อย ก็จะทำการลง Docker เพื่อเตรียมพร้อมสำหรับการ pull image
 
 ## How to install Server
 1. Download Ubuntu Server from https://ubuntu.com/download/server and install it to USB to make it ready to boot ubuntu os.
 2. Plug in Usb to server computer and select Ubuntu server and wait for set up.
-3. install tools that need for install docker like vim, ifconfig, git.
+3. Set up language, Time zone, Username Password 
+4. install tools that need for install docker like vim, ifconfig, git.
+5. set ip network (net-tools) for ssh from local notebook
 
 ## How to install Docker
 I use this web for install Docker : https://docs.docker.com/engine/install/ubuntu/
