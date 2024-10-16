@@ -20,7 +20,7 @@ payload["luminosity"] = Value; // Luminosity in kLux <br>
 <br>
 All are used as translations that we announced at the beginning of Code.
 
-## ESP32
+## Code ESP32
 
 ```cpp
 #include <Wire.h>
@@ -346,9 +346,16 @@ void readAnalogSensor() {
 ![1](https://github.com/user-attachments/assets/2264ea27-427b-4136-b6bd-30a476f28910)
 
 
+## Sensor ภายใน board Cucumber RIS
+* BMP280 : วัดความดันอากาศ
+* MPU6050 : ตรวจจับการเคลื่อนไหว
+* HTS221 : วัดอุณหภูมิและความชื้น
+* LDR : วัดระดับแสง
+
 ## สถานะไฟใน Cucumber RIS
 - สีขาวคือตอนเปิด<br>
 - สีเหลืองคือตอนกำลังเชื่อมเน็ต<br>
 - สีน้ำเงินคือกำลังเชื่อมต่อ MQTT <br>
 - สีแดงคือกำลังส่งข้อมูลไปให้ MQTT <br>
 - สีเขียวคือต้องเชื่อมต่อเสร็จในแต่ละการเชื่อม(MQTT, WIFI)
+
