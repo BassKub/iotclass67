@@ -1,4 +1,4 @@
-# Data Visualization.
+ # Data Visualization.
 
 การสร้าง Dashboard สำหรับ Visualization เพื่อดูค่า data ที่เรารับมานั้น ในขั้นตอนนี้เราจะใช้ framework ที่ชื่อว่า "Grafana" ร่วมกับ plugin ที่ชื่อว่า "FlowCharting" ที่จะช่วยสร้างแผนผังสถานที่เพื่อให้ UX ดียิ่งขึ้น ซึ่งการสร้างผังสถานที่ที่ต้องการ เราจะผ่านการทำใน "Draw.io" ที่เชื่อมอยู่ภายใน library
 Grafana จะถูกรันเป็น container ภายใต้ compose ที่มาจาก https://github.com/sergio11/iot_event_streaming_architecture ทำให้ขั้นตอนจะเริ่มที่การติดตั้ง FlowCharting
@@ -82,36 +82,39 @@ docker compose restart grafana
 # 1.ทำการสร้าง Floor plan หรือนำเข้าแปลนบ้านในรูปแบบ xml. หรือ svg. file
 กด add เพื่อเพิ่ม widget ในหน้า dashboard โดยการเลือก FlowCharting และเราจะได้ chart เริ่มต้นของ plugin นี้มาดังรูป
 
-![image](https://github.com/user-attachments/assets/9abe780a-a940-4a43-ac71-b86879c91fa5)
-![image](https://github.com/user-attachments/assets/71bf98dc-06cc-48b7-8c6d-7d7beae46e2d)
+![iot-001](https://github.com/user-attachments/assets/1983d5f2-1dc3-4fb5-aac4-2d668136b22f)
+![iot-002](https://github.com/user-attachments/assets/0cfcff2a-43b7-49ab-99e7-66e6cc1bd884)
+
 
 #2 กดปุ่ม edit diagram โดยตัวระบบจะลิงค์เราไปที่หน้าของ draw.io เพื่อให้เราแก้ไข โดยเราสามารถใส่ floor plan เป็นรูป หรือทำเป็น diagram ก็ได้ (จริง ๆ สามารถทำบน local แล้ว export เป็น SVG หากใช้รูป หรือ xml ไปใช้งานได้เช่นกัน)
 
-![image](https://github.com/user-attachments/assets/8d705606-2a0c-497d-8e46-dbc6320a6194)
+![iot-003](https://github.com/user-attachments/assets/06e2411a-8e3b-4d1d-bcb9-e70394439e0b)
+
 
 โดยผมจะใช้เป็นแปลนบ้านไฟล์.xml นำเข้ามาจากนั้นทำการแบ่งlayerและadd text box และทำการเพิ่มเลขห้องไว้รอเพื่อที่จะรอทำการ mapping ค่าต่างๆของเซ็นเซอร์ iot มาแสดงผล Dashboard ใน Grafana
 
-![image](https://github.com/user-attachments/assets/ea8e2d42-810b-4b08-b6f2-d424544d6e88)
+
+![iot-004](https://github.com/user-attachments/assets/785a9a10-12f8-478b-bccb-7170199ab5d8)
 
 # 2.การแสดงผลค่า sensor ในแปลนบ้านที่เราทำการสร้างไว้
 การที่เราจะนำค่ามาแสดงนั้น ด้วยความที่ค่าทั้งหมดตอนนี้ถูกดึงมาจากการใช้งาน Prometheus ทำให้เราสามารถ query ค่าออกมาใช้งานได้ โดยมีขั้นตอนดังนี้
 1. การ query ค่าจาก Prometeus
    เลือก Data source เป็น Prometheus เพราะเราใช้ Prometheus ในการดึง streaming data
    
-   ![image](https://github.com/user-attachments/assets/2675f19a-14e1-40b5-880e-4b9a6f205661)
+   ![iot-005](https://github.com/user-attachments/assets/43b9e176-ee37-48a2-9964-9927c57740ff)
 
    select metric เป็นค่าที่เราอยากใช้มาแสดง เช่น sample_sensor_metric_temperature
    
-   ![image](https://github.com/user-attachments/assets/e0783ed4-efde-45f7-be32-ff1eed8c4914)
+   ![iot-006](https://github.com/user-attachments/assets/3f6cfb3b-08c3-45bb-9eb4-80feaef05ac7)
 
    กด run queries เพื่อดึงค่าข้อมูล
     
-   ![image](https://github.com/user-attachments/assets/61194cb4-420b-4f75-9bc6-f4dd48985085)
+   ![iot-007](https://github.com/user-attachments/assets/908eca54-401d-4425-8fc7-5163089291d2)
 
 3. ทำการกำหนด rule เพื่อที่จะให้เราสามารถตั้งค่าสีกับอุณหภูมิที่เราต้องการให้มัน alert ได้
 4. 
-   ![image](https://github.com/user-attachments/assets/f2b265c3-74d9-4c33-bd06-8c8d6703da83)
-   ![image](https://github.com/user-attachments/assets/777eb342-d03b-4324-9296-3cfc871cffb3)
+   ![iot-008](https://github.com/user-attachments/assets/8c31a8d9-6f3b-421c-8c4c-5960db98cba5)
+   ![iot-009](https://github.com/user-attachments/assets/d6ccc6d9-4f49-459a-8628-059649fbe342)
 
    หลังจากนั้นเราก็จะสามารถเห็นใน Dashboard ของเราได้
 
