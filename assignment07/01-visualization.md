@@ -116,6 +116,7 @@ docker compose restart grafana
    หลังจากนั้นเราก็จะสามารถเห็นใน Dashboard ของเราได้
 
    ภาพรวมของ Dashboard
+   จากภาพจะเห็นเซ็นเซอร์อุณหภูมิในห้องต่างๆทั้งหมด 10 เซ็นเซอร์ โดยรับค่ามาแสดงใน Grafana โดยผมจะทำการ setting ค่าไว้ว่าถ้าอุณหภูมิเกนเท่านี้ถึงจะเปลี่ยนสี
 ![S__9166861_0](https://github.com/user-attachments/assets/9727847e-d89d-4534-b7a4-d6d25801283a)
 ![S__9166863_0](https://github.com/user-attachments/assets/0c071578-467c-45ab-aa54-e7ae0b05bcab)
 
